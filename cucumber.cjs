@@ -29,7 +29,7 @@ module.exports = {
      * @type {string[]}
      */
     format: [
-      "progress-bar",
+      "progress",
       "json:reports/cucumber-report.json",
       "html:reports/cucumber-report.html",
     ],
