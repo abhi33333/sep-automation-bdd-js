@@ -38,6 +38,33 @@ class Price {
 }
 
 /**
+ * @typedef {Object} ApplicantData
+ * @property {string} firstName
+ * @property {string} lastName
+ * @property {string} email
+ * @property {string} phoneNumber
+ * @property {string} howDidYouHear
+ */
+class Applicant {
+  /**
+   * @param {ApplicantData} applicantData
+   */
+  constructor({
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    howDidYouHear
+  }) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+    this.howDidYouHear = howDidYouHear;
+  }
+}
+
+/**
  * @typedef {Object} ProductData
  * @property {boolean} available
  * @property {string} productName
@@ -52,10 +79,14 @@ class Price {
  * @property {string} externalUrl
  * @property {string} terms
  * @property {PriceData[]} prices
+ * @property {ApplicantData} applicant
  */
 class Product {
   /** @type {Price[]} */
   prices;
+
+  /** @type {Applicant} */
+  applicant;
 
   /**
    * @param {ProductData} productData
@@ -73,7 +104,8 @@ class Product {
     refundDate,
     externalUrl,
     terms,
-    prices
+    prices,
+    applicant
   }) {
     this.available = available;
     this.productName = productName;
@@ -88,14 +120,9 @@ class Product {
     this.externalUrl = externalUrl;
     this.terms = terms;
     this.prices = prices.map(price => new Price(price));
+    this.applicant = new Applicant(applicant);
   }
 }
 
-// Instantiate the Product object
+// Instantiate the Product object (now includes nested applicant data)
 export const productInfo = new Product(JSON.parse(readFileSync('./data/qa_data.json', 'utf8')));
-
-
-
-
-
-
