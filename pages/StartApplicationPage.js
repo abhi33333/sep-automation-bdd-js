@@ -89,6 +89,11 @@ export class StartApplicationPage extends BasePage {
       "(//input[@formcontrolname='phoneNumber'])[2]"
     );
 
+    this.firstNameLabel = page.locator("//label[contains(., 'First Name')]");
+    this.lastNameLabel = page.locator("//label[contains(., 'Last Name')]");
+    this.emailLabel = page.locator("//label[contains(., 'Email Address')]");
+    this.phoneLabel = page.locator("//label[contains(., 'Phone')]");
+
     this.flexiblePaymentsPlanAvailableText = page.locator(
       "//p[text() = 'Flexible payments plan available']"
     );
@@ -107,9 +112,10 @@ export class StartApplicationPage extends BasePage {
       "//div[@class='col-sm']/b[@class = 'info-primary']"
     );
 
-    this.footer = page.locator(
-      "//p[@class = 'footer-text' and contains(text(), 'Need help?')]"
-    );
+    this.footer = page.getByText(
+  "Need help? Contact us at enrollment@cydeo.com",
+  { exact: true }
+   ).first();
 
     this.nextButton = page.locator(
       "//button[@class = 'next-button'][contains(text(), 'Next')]"
@@ -124,6 +130,47 @@ export class StartApplicationPage extends BasePage {
     this.discountedPrice = page.locator("//b[@class='info-primary']");
 
     this.originalPrice = page.locator("//s[contains(.,'$')]");
+
+    this.cydeoLogo = page.locator(
+  "//div[contains(@class,'left')]//*[contains(@src,'logo') or contains(@alt,'Cydeo')]"
+);
+
+this.secureCheckoutText = page.getByText("Secure checkout", {
+  exact: true
+});
+
+this.programNameOnLeftPanel = page.locator(
+  "//div[contains(@class,'left')]//*[normalize-space()='Test Automation with Selenium']"
+);
+
+this.leftFooter = page.locator(
+  "//footer//*[contains(@class,'left')]"
+);
+
+this.footerCydeoLogo = page.locator(
+  "(//*[contains(@src,'logo') or contains(@alt,'Cydeo')])[last()]"
+);
+
+this.termsAndConditionsLink = page.getByRole("link", {
+  name: "Terms and conditions",
+  exact: true
+});
+
+this.privacyPolicyLink = page.getByRole("link", {
+  name: "Privacy Policy",
+  exact: true
+});
+
+this.disclaimerLink = page.getByRole("link", {
+  name: "Disclaimer",
+  exact: true
+});
+
+this.cookiePolicyLink = page.getByRole("link", {
+  name: "Cookie Policy",
+  exact: true
+});
+
 
     
   }
