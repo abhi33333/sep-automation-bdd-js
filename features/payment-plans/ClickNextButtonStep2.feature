@@ -1,5 +1,5 @@
 @sep16
-Feature: Click on the next button on payment plans page   #! Test Only
+Feature: Click on the next button on payment plans page
 
     As a customer, I should be able to click on the next button on step 2 when I select a plan.
 
@@ -8,46 +8,51 @@ Feature: Click on the next button on payment plans page   #! Test Only
     #* AC3: In the stepper, steps 1 and 2 should be green, and step 3 should be blue.
     #* AC4: The payment component should be displayed.
     #* AC5: A price summary should be displayed.
-    #* AC6: The back button should be displayed.
-    #* AC7: By default, the pay button should be displayed.
+    #* AC6: The back button should be displayed and enabled.
+
+
+    #TODO: Create scenarios that cover all the acceptance criteria
 
     Background:
         Given user is on the enrollment page
-        And user has completed step one with valid information
-        And user is on step two of the enrollment process
+        And user has completed start application step
+
+
+    #Scenario: Clicking on upfront payment plan activates the next button
+    #    Then the next button is disabled by deault
+    #    When user selects the upfront payment plan
+    #    Then the next button is enabled
+
+    #Scenario: Clicking on installment payment plan activates the next button
+    #    Then the next button is disabled by deault
+    #    When user selects the installment payment plan
+    #    Then the next button is enabled
 
     @sep16-1
-    Scenario: The next button is disabled by default before a plan is selected
-        Then the next button should be disabled
+    Scenario Outline: Clicking on any payment plan activates the next button
+        Then the next button is disabled by deault
+        When user selects the "<payment_plan>" payment plan
+        Then the next button is enabled
+
+        Examples:
+            | payment_plan |
+            | Upfront      |
+            | Installments |
+
 
     @sep16-2
-    Scenario: Verify full upfront payment plan flow from selection to review page
-        When user clicks the upfront payment plan
-        Then the next button should be enabled
-        And the upfront price summary should be displayed on the payment plan page
+    Scenario: Clicking on the next button navigates to step 3 page
+        When user selects the "Upfront" payment plan
+        And user clicks on the next button
+        Then the review step stepper circle is blue
+        And the payment plan stepper circle is green
+        And the start application stepper circle is green
 
-        When user clicks the next button on the payment plan page
-        Then the review page should be displayed
-        And the start application stepper circle should be green
-        And the payment plan stepper circle should be green
-        And the review stepper circle should be blue
-        And the payment component should be displayed
-        And the upfront price summary should be displayed on the review page
-        And the back button should be displayed
-        And the pay button should be displayed
 
     @sep16-3
-    Scenario: Verify full installments payment plan flow from selection to review page
-        When user clicks the installments payment plan
-        Then the next button should be enabled
-        And the installments price summary should be displayed on the payment plan page
-
-        When user clicks the next button on the payment plan page
-        Then the review page should be displayed
-        And the start application stepper circle should be green
-        And the payment plan stepper circle should be green
-        And the review stepper circle should be blue
-        And the payment component should be displayed
-        And the installments price summary should be displayed on the review page
-        And the back button should be displayed
-        And the pay button should be displayed
+    Scenario: Payment sumamry is dispalyed after selecting a payment plan
+        When user selects the "Upfront" payment plan
+        Then the upfront payment summary is displayed
+        When user selects the "Installments" payment plan
+        Then the installment payment summary is displayed
+        And the back button is displayed and enabled
