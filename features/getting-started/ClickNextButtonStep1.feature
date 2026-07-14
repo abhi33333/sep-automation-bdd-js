@@ -20,8 +20,8 @@ Feature: Click on the next button on step 1
         And user selects from How did you hear about us dropdown
         And user clicks the next button on start application step
         Then user should be navigated to payment plan step
-        And the start application stepper circle should be green
-        And the payment plan stepper circle should be blue
+        And on payment plan step, the start application stepper circle should be green
+        And on payment plan step, the payment plan stepper circle should be blue
 
 
     @sep19-2
@@ -32,6 +32,6 @@ Feature: Click on the next button on step 1
         And user enters phone number
         And user clicks the next button on start application step
         Then user should be navigated to payment plan step
-        And the start application stepper circle should be green
-        And the payment plan stepper circle should be blue
+        And on payment plan step, the start application stepper circle should be green
+        And on payment plan step, the payment plan stepper circle should be blue
 
