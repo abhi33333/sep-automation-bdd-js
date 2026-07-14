@@ -31,6 +31,12 @@ Then('user should be navigated to payment plan step', async function () {
   await expect(paymentPlanPage.chooseAPaymentPlanText).toBeVisible();
 });
 
-Then('the payment plan stepper circle should be blue', async function () {
-  await expect(paymentPlanPage.step2).toHaveCSS('background-color', 'rgb(1, 201, 255)');
+Then('on payment plan step, the start application stepper circle should be green', async function () {
+  await expect(paymentPlanPage.step1)
+    .toHaveCSS('background-color', 'rgb(172, 245, 138)');
+});
+
+Then('on payment plan step, the payment plan stepper circle should be blue', async function () {
+  await expect(paymentPlanPage.step2)
+    .toHaveCSS('background-color', 'rgb(1, 201, 255)');
 });
