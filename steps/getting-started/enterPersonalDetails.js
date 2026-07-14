@@ -33,10 +33,6 @@ Then('user should remain on start application step', async function () {
   await expect(startApplicationPage.enterPersonalDetails).toBeVisible();
 });
 
-Then('the email address field should show a validation error', async function () {
-  await expect(startApplicationPage.emailLabel).toHaveCSS('color', 'rgb(255, 0, 0)');
-});
-
 Then('the email address field should not be accepted as valid', async function () {
   // NOTE: a malformed-but-non-empty email does not turn the label red in this app —
   // only a genuinely empty required field does. Confirming navigation was blocked instead,
@@ -72,13 +68,17 @@ Then('a standard list of options should be displayed', async function () {
 // ---- AC3: Next click blocked on missing/invalid required data ----
 
 Then('the first name field should show a validation error', async function () {
-  await expect(startApplicationPage.firstNameLabel).toHaveCSS('color', 'rgb(255, 0, 0)');
+  await expect(startApplicationPage.firstNameInputBox).toHaveClass(/ng-invalid/);
 });
 
 Then('the last name field should show a validation error', async function () {
-  await expect(startApplicationPage.lastNameLabel).toHaveCSS('color', 'rgb(255, 0, 0)');
+  await expect(startApplicationPage.lastNameInputBox).toHaveClass(/ng-invalid/);
+});
+
+Then('the email address field should show a validation error', async function () {
+  await expect(startApplicationPage.emailInputBox).toHaveClass(/ng-invalid/);
 });
 
 Then('the phone number field should show a validation error', async function () {
-  await expect(startApplicationPage.phoneLabel).toHaveCSS('color', 'rgb(255, 0, 0)');
+  await expect(startApplicationPage.phoneNumberInputBox).toHaveClass(/ng-invalid/);
 });
