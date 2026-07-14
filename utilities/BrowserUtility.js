@@ -35,8 +35,9 @@ export class BrowserUtility {
    * @returns {Promise<void>} - A promise that resolves when the title matches the expected value.
    */
   static async verify_title(page, expected) {
-    const actual = await page.title();
-    expect(actual).toBe(expected);
+    //const actual = await page.title();
+    //expect(actual).toBe(expected);
+    await expect(page).toHaveTitle(expected);
   }
 
   /**
