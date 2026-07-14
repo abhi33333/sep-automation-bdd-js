@@ -1,7 +1,7 @@
 import {  Then, When } from "@cucumber/cucumber";
 import { expect} from "@playwright/test";
-import { paymentPlanPage, page, startApplicationPage, reviewPaymentPage } from "../../globalPagesSetup.js";
-import { productInfo } from "../../utilities/qa-data-reader.js";
+import { paymentPlanPage, page } from "../../globalPagesSetup.js";
+//import { productInfo } from "../../utilities/qa-data-reader.js";
 
 When('user selects the Upfront payment plan', async function () {
     await paymentPlanPage.selectPaymentPlan('upfront');
@@ -9,6 +9,10 @@ When('user selects the Upfront payment plan', async function () {
 
 When('user selects the Installments payment plan', async function () {
     await paymentPlanPage.selectPaymentPlan('installments');
+});
+
+Then("the Next button should be disabled", async function () {
+  await expect(paymentPlanPage.inactiveNextButton).toBeDisabled();
 });
 
 Then('the Upfront payment plan should be highlighted', async function () {
