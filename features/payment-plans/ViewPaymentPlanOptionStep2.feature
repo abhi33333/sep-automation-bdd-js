@@ -20,8 +20,7 @@ Feature: View payment plan options in Step 2   #! test only
 
 Background:
         Given user is on the enrollment page
-        And user has completed step one with valid information
-        And user is on step two of the enrollment process
+        And user has completed start application step
 
     #TODO: Create scenarios that cover all the acceptance criteria
 
