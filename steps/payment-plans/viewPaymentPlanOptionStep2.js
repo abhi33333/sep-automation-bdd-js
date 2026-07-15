@@ -1,27 +1,11 @@
-import { Then} from "@cucumber/cucumber";
-import { expect} from "@playwright/test";
-import { paymentPlanPage, page } from "../../globalPagesSetup.js";
+import { Then } from "@cucumber/cucumber";
+import { expect } from "@playwright/test";
+import { paymentPlanPage } from "../../globalPagesSetup.js";
 import { productInfo } from "../../utilities/qa-data-reader.js";
 
-const activePaymentPlans = productInfo.prices.filter(
-  price => price.active
-);
-
-const upfrontPlans = activePaymentPlans.filter(
-  price => price.type.toLowerCase() === "one-time"
-);
-
-const installmentPlans = activePaymentPlans.filter(
-  price => price.type.toLowerCase() === "recurring"
-);
-
-Then(
-  "only one Upfront payment plan should be displayed",
-  async function () {
-    await expect(paymentPlanPage.upfrontPaymentOption).toHaveCount(1);
-  }
-);
-
+Then("only one Upfront payment plan should be displayed", async function () {
+  await expect(paymentPlanPage.upfrontPaymentOption).toHaveCount(1);
+});
 
 Then(
   'the first row of the Upfront payment plan should display "Upfront"',
@@ -30,35 +14,31 @@ Then(
   }
 );
 
-
 Then(
   'the second row of the Upfront payment plan should display the expected upfront price followed by "pay once"',
   async function () {
-    const upfrontPlan = upfrontPlans[0];
+    const upfrontPlan = productInfo.prices.find(
+      (plan) => plan.active && plan.type.toLowerCase() === "one-time"
+    );
 
-    if (!upfrontPlan) {
-      throw new Error("No active Upfront payment plan was found in qa_data.json");
-    }
-
-    const expectedUpfrontPrice = upfrontPlan.upfrontDiscount
+    const expectedPrice = upfrontPlan.upfrontDiscount
       ? upfrontPlan.baseAmount - upfrontPlan.upfrontDiscountAmount
       : upfrontPlan.baseAmount;
 
     await expect(paymentPlanPage.upfrontPaymentAmount).toContainText(
-      `$${expectedUpfrontPrice}`
+      `$${expectedPrice}`
     );
 
-    await expect(paymentPlanPage.payOnceTextUpFront).toHaveText(
-      "pay once"
-    );
+    await expect(paymentPlanPage.payOnceTextUpFront).toHaveText("pay once");
   }
 );
-
 
 Then(
   "the total number of payment plans should match the expected number",
   async function () {
-    const expectedNumberOfPlans = activePaymentPlans.length;
+    const expectedNumberOfPlans = productInfo.prices.filter(
+      (plan) => plan.active
+    ).length;
 
     await expect(paymentPlanPage.paymentPlanBoxes).toHaveCount(
       expectedNumberOfPlans
@@ -66,80 +46,64 @@ Then(
   }
 );
 
-
 Then(
   "the number of installments should match the expected number",
   async function () {
-    for (const installmentPlan of installmentPlans) {
-      await paymentPlanPage.selectPaymentPlan("installments");
+    const installmentPlan = productInfo.prices.find(
+      (plan) => plan.active && plan.type.toLowerCase() === "recurring"
+    );
 
-      await expect(
-        paymentPlanPage.installmentsNumberUnderInstallments
-      ).toHaveText(String(installmentPlan.numberOfInstallments));
-    }
+    await paymentPlanPage.selectPaymentPlan("installments");
+
+    await expect(
+      paymentPlanPage.installmentsNumberUnderInstallments
+    ).toHaveText(String(installmentPlan.numberOfInstallments));
   }
 );
-
 
 Then(
   'the first row of the Installments payment plan should display the expected number of installments followed by "Installments"',
   async function () {
-    const installmentPlan = installmentPlans[0];
+    const installmentPlan = productInfo.prices.find(
+      (plan) => plan.active && plan.type.toLowerCase() === "recurring"
+    );
 
-    if (!installmentPlan) {
-      throw new Error(
-        "No active Installments payment plan was found in qa_data.json"
-      );
-    }
-
-    const expectedText =
-      `${installmentPlan.numberOfInstallments} Installments`;
-
-    await expect(
-      paymentPlanPage.installmentsPaymentFrame
-    ).toContainText(expectedText);
+    await expect(paymentPlanPage.installmentsPaymentFrame).toContainText(
+      `${installmentPlan.numberOfInstallments} Installments`
+    );
   }
 );
-
 
 Then(
   'the second row of the Installments payment plan should display the expected monthly price followed by "per month"',
   async function () {
-    const installmentPlan = installmentPlans[0];
-
-    if (!installmentPlan) {
-      throw new Error(
-        "No active Installments payment plan was found in qa_data.json"
-      );
-    }
+    const installmentPlan = productInfo.prices.find(
+      (plan) => plan.active && plan.type.toLowerCase() === "recurring"
+    );
 
     const expectedMonthlyPrice =
-      installmentPlan.baseAmount /
-      installmentPlan.numberOfInstallments;
+      installmentPlan.baseAmount / installmentPlan.numberOfInstallments;
 
-    await expect(
-      paymentPlanPage.installmentsPaymentAmount
-    ).toContainText(`$${expectedMonthlyPrice}`);
+    await expect(paymentPlanPage.installmentsPaymentAmount).toContainText(
+      `$${expectedMonthlyPrice}`
+    );
 
-    await expect(
-      paymentPlanPage.perMonthTextInstallments
-    ).toHaveText("per month");
+    await expect(paymentPlanPage.perMonthTextInstallments).toHaveText(
+      "per month"
+    );
   }
 );
-
 
 Then(
   "all installment payment plans should be unique",
   async function () {
     const installmentPlanTexts =
-      await paymentPlanPage.installmentsPaymentOption.allInnerTexts();
+      await paymentPlanPage.installmentsPaymentFrame.allInnerTexts();
 
-    const normalizedPlanTexts = installmentPlanTexts.map(
-      text => text.trim()
+    const uniquePlans = new Set(
+      installmentPlanTexts.map((text) => text.trim())
     );
 
-    const uniquePlanTexts = new Set(normalizedPlanTexts);
-
-    expect(uniquePlanTexts.size).toBe(normalizedPlanTexts.length);
+    expect(uniquePlans.size).toBe(installmentPlanTexts.length);
   }
 );

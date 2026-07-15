@@ -10,36 +10,39 @@ Feature: Selecting a price plan
 
 Background:
         Given user is on the enrollment page
-        And user has completed step one with valid information
-        And user is on step two of the enrollment process
+        And user has completed start application step
 
     #TODO: Create scenarios that cover all the acceptance criteria
 
     @sep14-1
+    Scenario: Verify that the Next button is disabled before selecting a payment plan
+            Then the Next button should be disabled
+
+    @sep14-2
     Scenario: Verify that the Upfront payment plan is highlighted when selected
         When user selects the Upfront payment plan
         Then the Upfront payment plan should be highlighted
 
 
-    @sep14-2
+    @sep14-3
     Scenario: Verify that the Installments payment plan is highlighted when selected
         When user selects the Installments payment plan
         Then the Installments payment plan should be highlighted
 
 
-    @sep14-3
+    @sep14-4
     Scenario: Verify that selecting the Upfront payment plan enables the Next button
         When user selects the Upfront payment plan
         Then the Next button should be enabled
 
 
-    @sep14-4
+    @sep14-5
     Scenario: Verify that selecting the Installments payment plan enables the Next button
         When user selects the Installments payment plan
         Then the Next button should be enabled
 
 
-    @sep14-5
+    @sep14-6
     Scenario: Verify that the user can change the selection from Upfront to Installments
         When user selects the Upfront payment plan
         And user selects the Installments payment plan
@@ -48,7 +51,7 @@ Background:
         And the Next button should remain enabled
 
 
-    @sep14-6
+    @sep14-7
     Scenario: Verify that the user can change the selection from Installments to Upfront
         When user selects the Installments payment plan
         And user selects the Upfront payment plan
