@@ -10,7 +10,7 @@ on:
       - main
 
   schedule:
-    - cron: "0 13 * * *"
+    - cron: "0 11 * * *"
 
   workflow_dispatch:
 
